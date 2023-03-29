@@ -52,6 +52,7 @@ const searchSlice = createSlice({
     },
     setSearchSelectedTag: (state, action: PayloadAction<string>) => {
       state.searchSelectedTag = action.payload;
+      state.searchCurrentItems = [];
     },
     setSearchIsLoading: (state, action: PayloadAction<boolean>) => {
       state.searchIsLoading = action.payload;
