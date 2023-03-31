@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useQuestionsQuery } from "../redux/questionApi";
-import { addCurrentItems, increseCurrentPage } from "../redux/searchSlice";
+import { addCurrentItems, increaseCurrentPage } from "../redux/searchSlice";
 import { useAppDispatch, useAppSelector } from "../redux/store";
 import LoadingSpinner from "./LoadingSpinner";
 import Question from "./Question";
@@ -17,11 +17,25 @@ function Questionlist() {
 
   useEffect(() => {
     const onScroll = () => {
+      console.log(
+        "document.body.offsetHeight: ",
+        document.body.offsetHeight,
+        " window.innerHeight + window.scrollY: ",
+        window.innerHeight + window.scrollY
+      );
+
+      // Here is the issue
+      // "window.innerHeight + window.scrollY >= document.body.offsetHeight"
+      // does work well when using browser on windows
+      // but it doesn't work quite well when using browser on mac
+      // An easy way to fix it is to add 50px to "window.innerHeight + window.scrollY"
+      // so that it will trigger refetch when it less than 50px away from bottom
+
       const scrolledToBottom =
-        window.innerHeight + window.scrollY >= document.body.offsetHeight;
+        window.innerHeight + window.scrollY + 50 >= document.body.offsetHeight;
       if (scrolledToBottom && !isFetching) {
         console.log("Fetching more data...");
-        dispatch(increseCurrentPage());
+        dispatch(increaseCurrentPage());
       }
     };
 

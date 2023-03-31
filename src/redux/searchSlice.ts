@@ -10,6 +10,7 @@ export interface SearchState {
   searchInput: string;
   searchTags: Tag[];
   searchSelectedTag: string;
+  searchCurrentPage: number;
   searchIsLoading: boolean;
   searchCurrentItems: Item[];
 }
@@ -22,6 +23,7 @@ const initialState: SearchState = {
   searchInput: "",
   searchTags: [],
   searchSelectedTag: "",
+  searchCurrentPage: 1,
   searchIsLoading: false,
   searchCurrentItems: [],
 };
@@ -30,7 +32,7 @@ const searchSlice = createSlice({
   name: "search",
   initialState,
   reducers: {
-    increseCurrentPage: (state) => {
+    increaseCurrentPage: (state) => {
       state.currentPage++;
     },
     setCurrentTag: (
@@ -52,6 +54,7 @@ const searchSlice = createSlice({
     },
     setSearchSelectedTag: (state, action: PayloadAction<string>) => {
       state.searchSelectedTag = action.payload;
+      state.searchCurrentPage = 1;
       state.searchCurrentItems = [];
     },
     setSearchIsLoading: (state, action: PayloadAction<boolean>) => {
@@ -60,11 +63,17 @@ const searchSlice = createSlice({
     setSearchCurrentItems: (state, action: PayloadAction<Item[]>) => {
       state.searchCurrentItems = action.payload;
     },
+    increaseSearchCurrentPage: (state) => {
+      state.searchCurrentPage++;
+    },
+    addSearchCurrentItems: (state, action: PayloadAction<Item[]>) => {
+      state.searchCurrentItems.push(...action.payload);
+    },
   },
 });
 
 export const {
-  increseCurrentPage,
+  increaseCurrentPage,
   setCurrentTag,
   addCurrentItems,
   setSearchInput,
@@ -72,5 +81,7 @@ export const {
   setSearchSelectedTag,
   setSearchIsLoading,
   setSearchCurrentItems,
+  increaseSearchCurrentPage,
+  addSearchCurrentItems,
 } = searchSlice.actions;
 export default searchSlice.reducer;
